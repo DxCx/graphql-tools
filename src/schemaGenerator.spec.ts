@@ -75,6 +75,10 @@ describe('generating schema from shorthand', () => {
     assert.throw(makeExecutableSchema, TypeError);
   });
 
+  it('throws an error if typeDefinitions are not provided', () => {
+    assert.throw(() => makeExecutableSchema({ typeDefs: undefined, resolvers: {} }), SchemaError);
+  });
+
   it('throws an error if no resolveFunctions are provided', () => {
     assert.throw(() => (<any> makeExecutableSchema)({ typeDefs: 'blah' }), SchemaError);
   });
@@ -865,6 +869,86 @@ describe('providing useful errors from resolve functions', () => {
     });
   });
 
+  it('will use default resolver of non found when asserting undefined', () => {
+    const shorthand = `
+      type Thread {
+        name: String
+      }
+      type RootQuery {
+        thread(name: String): Thread
+      }
+      schema {
+        query: RootQuery
+      }
+    `;
+    const resolve = {
+      RootQuery: {
+        thread(root: any, args: { [key: string]: any }) {
+            return args;
+        },
+      },
+    };
+
+    const jsSchema = makeExecutableSchema({
+      typeDefs: shorthand,
+      resolvers: resolve,
+      allowUndefinedInResolve: false,
+    });
+    const testQuery = `{
+        thread(name: "SomeThread") {
+            name
+        }
+    }`;
+    const expectedResData = {
+        thread: {
+            name: 'SomeThread',
+        },
+    };
+    return graphql(jsSchema, testQuery).then((res) => {
+      assert.deepEqual(res.data, expectedResData);
+    });
+  });
+
+  it('will use default resolver when returning function properties ', () => {
+    const shorthand = `
+      type Thread {
+        name: String
+      }
+      type RootQuery {
+        thread(name: String): Thread
+      }
+      schema {
+        query: RootQuery
+      }
+    `;
+    const resolve = {
+      RootQuery: {
+        thread(root: any, args: { [key: string]: any }) {
+            return { name: () => args['name'] };
+        },
+      },
+    };
+
+    const jsSchema = makeExecutableSchema({
+      typeDefs: shorthand,
+      resolvers: resolve,
+      allowUndefinedInResolve: false,
+    });
+    const testQuery = `{
+        thread(name: "SomeThread") {
+            name
+        }
+    }`;
+    const expectedResData = {
+        thread: {
+            name: 'SomeThread',
+        },
+    };
+    return graphql(jsSchema, testQuery).then((res) => {
+      assert.deepEqual(res.data, expectedResData);
+    });
+  });
+
   it('will not throw errors on undefined by default', (done) => {
     const shorthand = `
       type RootQuery {
@@ -1024,6 +1108,40 @@ describe('Attaching connectors to schema', () => {
         expect(res.data).to.deep.equal(expected);
       });
     });
+
+    it('can attach with existing static connectors', () => {
+      const resolvers = {
+          RootQuery: {
+              testString(root: any, args: { [key: string]: any }, ctx: any) {
+                  return ctx.connectors.staticString;
+              },
+          },
+      };
+      const typeDef = `
+          type RootQuery {
+            testString: String
+          }
+
+          schema {
+            query: RootQuery
+          }
+      `;
+      const jsSchema = makeExecutableSchema({ typeDefs: typeDef, resolvers: resolvers, connectors: testConnectors });
+      const query = `{
+        testString
+      }`;
+      const expected = {
+        testString: 'Hi You!',
+      };
+      return graphql(jsSchema, query, {}, {
+          connectors: {
+              staticString: 'Hi You!',
+          },
+      }).then((res) => {
+        expect(res.data).to.deep.equal(expected);
+      });
+    });
+
   });
 
   it('actually attaches the connectors', () => {
@@ -1074,6 +1192,22 @@ describe('Attaching connectors to schema', () => {
       );
     });
   });
+
+  it('throws error if trying to attach non-functional connectors', () => {
+    const jsSchema = makeExecutableSchema({ typeDefs: testSchema, resolvers: testResolvers });
+    (<any> attachConnectorsToContext)(jsSchema, { testString: 'a' });
+    const query = `{
+      species(name: "strix")
+      stuff
+      useTestConnector
+    }`;
+    return graphql(jsSchema, query, undefined, {}).then((res) => {
+      expect((<any> res.errors[0]).originalError.message).to.equal(
+        'Connector must be a function or an class'
+      );
+    });
+  });
+
   it('does not interfere with schema level resolve function', () => {
     const jsSchema = makeExecutableSchema({ typeDefs: testSchema, resolvers: testResolvers });
     const rootResolver = () => ({ stuff: 'stuff', species: 'ROOT' });
