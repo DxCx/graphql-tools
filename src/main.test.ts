@@ -1,7 +1,19 @@
-// This file cannot be written with ECMAScript 2015 because it has to load
-// the Babel require hook to enable ECMAScript 2015 features!
-require('babel-core/register');
-require('babel-polyfill');
+// Import mocha typings.
+import 'mocha';
 
-// The tests, however, can and should be written with ECMAScript 2015.
-require('./tests');
+// Load all spec files
+interface IWebpackRequire {
+    context(file: string, flag?: boolean, exp?: RegExp): any;
+}
+// const testsContext = (<any> require as IWebpackRequire).context('.', true, /.+\.spec\.ts$/);
+//
+// testsContext.keys().forEach(testsContext);
+
+// make sure that all .ts files will be processed by webpack
+const codeContext = (<any> require as IWebpackRequire).context('.', true, /.+\.ts$/);
+codeContext.keys().forEach((file: string) => {
+    // And require all spec files to run them.
+    if ( file.indexOf('.spec.ts') !== -1 ) {
+        codeContext(file);
+    }
+});
