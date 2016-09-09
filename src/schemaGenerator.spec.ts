@@ -71,32 +71,33 @@ const testConnectors = {
 };
 
 describe('generating schema from shorthand', () => {
-  it('throws an error if no schema is provided', () => {
-    assert.throw(makeExecutableSchema, TypeError);
+  it('throws an error if no resolver is provided', () => {
+    expect(() => (<any> makeExecutableSchema)({ typeDefs: 'blah' })).to.throw('Must provide resolvers');
   });
 
   it('throws an error if typeDefinitions are not provided', () => {
-    assert.throw(() => makeExecutableSchema({ typeDefs: undefined, resolvers: {} }), SchemaError);
+    expect(() => (<any> makeExecutableSchema)({ typeDefs: undefined, resolvers: {} })).to.throw('Must provide typeDefs');
   });
 
   it('throws an error if no resolveFunctions are provided', () => {
-    assert.throw(() => (<any> makeExecutableSchema)({ typeDefs: 'blah' }), SchemaError);
+    expect(() => (<any> makeExecutableSchema)({ typeDefs: 'blah', resolvers: {} })).to.throw('GraphQLError');
   });
 
   it('throws an error if typeDefinitions is neither string nor array', () => {
-    assert.throw(() => (<any> makeExecutableSchema)({ typeDefs: {}, resolvers: {} }), SchemaError);
+    expect(() => (<any> makeExecutableSchema)({ typeDefs: {}, resolvers: {} })).to.throw('`typeDefs` must be a string or array');
   });
 
   it('throws an error if typeDefinition array contains not only functions and strings', () => {
-    assert.throw(() => (<any> makeExecutableSchema)({ typeDefs: [17], resolvers: {} }), SchemaError);
+    expect(() => (<any> makeExecutableSchema)({ typeDefs: [17], resolvers: {} }))
+    .to.throw('typeDef array must contain only strings and functions, got number');
   });
 
   it('throws an error if resolverValidationOptions is not an object', () => {
-    assert.throw(() => makeExecutableSchema({
+    expect(() => makeExecutableSchema({
       typeDefs: 'blah',
       resolvers: {},
       resolverValidationOptions: 'string',
-    }), SchemaError);
+    })).to.throw('Expected `resolverValidationOptions` to be an object');
   });
 
   it('can generate a schema', () => {
@@ -586,7 +587,7 @@ describe('generating schema from shorthand', () => {
       }),
     });
 
-    assert.throws(() => assertResolveFunctionsPresent(schema), SchemaError);
+    expect(() => assertResolveFunctionsPresent(schema)).to.throw('Resolver "Query.aField" must be a function');
   });
 
   it('throws an error if a resolver is not a function', () => {
@@ -600,7 +601,7 @@ describe('generating schema from shorthand', () => {
 
     const rf = { Query: { bird: 'NOT A FUNCTION' } };
 
-    assert.throws(() => makeExecutableSchema({ typeDefs: short, resolvers: rf }), SchemaError);
+    expect(() => makeExecutableSchema({ typeDefs: short, resolvers: rf })).to.throw('Resolver Query.bird must be object or function');
   });
 
   it('shows a warning if a field is not scalar, but has no resolve func', () => {
@@ -766,10 +767,8 @@ describe('generating schema from shorthand', () => {
         }],
       },
     };
-    assert.throw(
-      () => makeExecutableSchema({ typeDefs: shorthand, resolvers: resolveFunctions }),
-      SchemaError
-    );
+    expect(() => makeExecutableSchema({ typeDefs: shorthand, resolvers: resolveFunctions }))
+    .to.throw('RootQuery.speciez defined in resolvers, but not in schema');
     done();
   });
   it('throws an error if a resolve type is not in schema', (done) => {
@@ -793,10 +792,8 @@ describe('generating schema from shorthand', () => {
         }],
       },
     };
-    assert.throw(
-      () => makeExecutableSchema({ typeDefs: shorthand, resolvers: resolveFunctions }),
-      SchemaError
-    );
+    expect(() => makeExecutableSchema({ typeDefs: shorthand, resolvers: resolveFunctions }))
+    .to.throw('"BootQuery" defined in resolvers, but not in schema');
     done();
   });
 });

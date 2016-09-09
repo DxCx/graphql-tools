@@ -1,5 +1,5 @@
-// Import mocha typings.
-import 'mocha';
+require('babel-core/register');
+require('babel-polyfill');
 
 // Load all spec files
 interface IWebpackRequire {

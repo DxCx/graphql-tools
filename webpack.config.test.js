@@ -15,7 +15,7 @@ module.exports = {
 		}],
 		loaders: [{
 			test: /\.ts$/,
-			loaders: ['awesome-typescript-loader?declaration=false&inlineSourceMap=true'],
+			loaders: ['babel-loader?sourceMap=inline', 'awesome-typescript-loader?declaration=false&inlineSourceMap=true'],
 		}],
 	},
 	plugins: [
