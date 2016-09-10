@@ -24,7 +24,6 @@ import {
     IConnectors,
     IConnector,
     IConnectorCls,
-    IConnectorFn,
     IResolveFn,
     IResolverValidationOptions,
 } from './Interfaces';
@@ -213,8 +212,6 @@ function attachConnectorsToContext(schema: GraphQLSchema, connectors: IConnector
       let connector: IConnector = connectors[connectorName];
       if ( !!connector.prototype ) {
           ctx.connectors[connectorName] = new (<IConnectorCls> connector)(ctx);
-      } else if ( typeof connector === 'function' ) {
-          ctx.connectors[connectorName] = (<IConnectorFn> connector)(ctx);
       } else {
           throw new Error(`Connector must be a function or an class`);
       }
