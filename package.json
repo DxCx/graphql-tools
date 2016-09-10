@@ -11,7 +11,7 @@
     "test": "npm run testonly && npm run lint",
     "lint": "tslint ./src/**/*.ts",
     "testonly": "mocha-webpack",
-    "prepublish": "webpack && npm run test"
+    "prepublish": "webpack"
   },
   "repository": {
     "type": "git",
