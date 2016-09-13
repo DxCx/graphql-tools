@@ -1,3 +1,5 @@
+import 'babel-core/register';
+import 'ts-node/register';
 import 'babel-polyfill';
 require('source-map-support').install();
 
