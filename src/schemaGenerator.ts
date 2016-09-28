@@ -373,7 +373,6 @@ function addErrorLoggingToSchema(schema: GraphQLSchema, logger: ILogger): void {
   });
 }
 
-// XXX badly named function. this doesn't really wrap, it just chains resolvers...
 function wrapResolver(innerResolver: GraphQLFieldResolveFn | undefined, outerResolver: GraphQLFieldResolveFn): GraphQLFieldResolveFn {
   return (obj, args, ctx, info) => {
     const root = outerResolver(obj, args, ctx, info);
@@ -383,21 +382,6 @@ function wrapResolver(innerResolver: GraphQLFieldResolveFn | undefined, outerRes
     return defaultResolveFn(root, args, ctx, info);
   };
 }
-
-function chainResolvers(resolvers: GraphQLFieldResolveFn[]){
-  return (root: any, args: {[argName: string]: any}, ctx: any, info: GraphQLResolveInfo) => {
-    return resolvers.reduce( 
-      (prev, curResolver) => {
-        if (curResolver){
-          return curResolver(prev, args, ctx, info);
-        }
-        return defaultResolveFn(prev, args, ctx, info);
-      },
-      root,
-    );
-  };
-}
-
 /*
  * fn: The function to decorate with the logger
  * logger: an object instance of type Logger
@@ -490,7 +474,6 @@ export {
   makeExecutableSchema,
   SchemaError,
   forEachField,
-  chainResolvers,
   addErrorLoggingToSchema,
   addResolveFunctionsToSchema,
   addCatchUndefinedToSchema,
