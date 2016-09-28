@@ -12,8 +12,8 @@ import {
   getNamedType,
   GraphQLNamedType,
   GraphQLFieldResolveFn,
-} from 'graphql';
-import { graphql } from 'graphql';
+} from 'graphql-rxjs';
+import { graphql } from 'graphql-rxjs';
 import * as uuid from 'node-uuid';
 import { forEachField, buildSchemaFromTypeDefinitions } from './schemaGenerator';
 

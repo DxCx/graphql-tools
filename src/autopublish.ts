@@ -2,7 +2,7 @@ import {
     GraphQLSchema,
     GraphQLFieldDefinition,
     GraphQLResolveInfo
-} from 'graphql';
+} from 'graphql-rxjs';
 import { PubSub } from 'graphql-subscriptions';
 import { chainResolvers } from './schemaGenerator';
 

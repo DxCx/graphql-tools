@@ -8,8 +8,8 @@ import {
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLResolveInfo,
-} from 'graphql';
-// import { printSchema } from 'graphql';
+} from 'graphql-rxjs';
+// import { printSchema } from 'graphql-rxjs';
 import { Logger } from '../Logger';
 import TypeA from './circularSchemaA';
 import {

@@ -1,6 +1,6 @@
 import { readFile } from 'fs';
 import { assert } from 'chai';
-import { graphql } from 'graphql';
+import { graphql } from 'graphql-rxjs';
 import { makeExecutableSchema } from '../schemaGenerator';
 import resolveFunctions from './discourse-api/schema';
 

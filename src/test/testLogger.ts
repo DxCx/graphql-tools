@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { graphql } from 'graphql';
+import { graphql } from 'graphql-rxjs';
 import { Logger } from '../Logger';
 import { makeExecutableSchema } from '../schemaGenerator';
 import 'mocha';

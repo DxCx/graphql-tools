@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import {
   graphql,
   GraphQLResolveInfo,
-} from 'graphql';
+} from 'graphql-rxjs';
 import {
   addMockFunctionsToSchema,
   MockList,

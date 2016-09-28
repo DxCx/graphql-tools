@@ -1,5 +1,5 @@
 {
-  "name": "graphql-tools",
+  "name": "graphql-tools-rxjs",
   "version": "0.7.2",
   "description": "A set of useful GraphQL tools",
   "main": "dist/index.js",
@@ -27,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/apollostack/graphql-tools.git"
+    "url": "git+https://github.com/DxCx/graphql-tools.git"
   },
   "keywords": [
     "GraphQL",
@@ -46,11 +46,10 @@
   "dependencies": {
     "deprecated-decorator": "^0.1.6",
     "lodash": "^4.3.0",
-    "node-uuid": "^1.4.7",
-    "typed-graphql": "^1.0.2"
+    "node-uuid": "^1.4.7"
   },
   "peerDependencies": {
-    "graphql": "^0.5.0 || ^0.6.0 || ^0.7.0"
+    "graphql-rxjs": "^0.5.0 || ^0.6.0 || ^0.7.0 || ^0.7.0-patch.2"
   },
   "devDependencies": {
     "@types/bluebird": "^3.0.32",
@@ -69,7 +68,7 @@
     "express": "^4.13.4",
     "express3": "0.0.0",
     "fs": "0.0.2",
-    "graphql": "^0.7.0",
+    "graphql-rxjs": "^0.7.0-patch.2",
     "graphql-subscriptions": "^0.1.5",
     "istanbul": "^0.4.5",
     "mocha": "^3.0.1",

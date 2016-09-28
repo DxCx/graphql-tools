@@ -8,7 +8,7 @@ import {
     GraphQLIsTypeOfFn,
     GraphQLTypeResolveFn,
     GraphQLObjectType,
-} from 'graphql';
+} from 'graphql-rxjs';
 
 /* TODO: Add documentation */
 

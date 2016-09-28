@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { graphql } from 'graphql';
+import { graphql } from 'graphql-rxjs';
 import { PubSub } from 'graphql-subscriptions';
 import { makeExecutableSchema } from '../schemaGenerator';
 import { autopublishMutationResults } from '../autopublish';
