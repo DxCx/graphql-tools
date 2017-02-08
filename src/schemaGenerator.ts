@@ -1,12 +1,12 @@
 // Generates a schema for graphql-js given a shorthand schema
 
-// TODO: document each function clearly in the code: what arguments it accepts
+// TODO: DocumentNode each function clearly in the code: what arguments it accepts
 // and what it outputs.
 
 // TODO: we should refactor this file, rename it to makeExecutableSchema, and move
 // a bunch of utility functions into a separate utitlities folder, one file per function.
 
-import { Document, parse, Kind, Definition } from 'graphql-rxjs';
+import { DocumentNode, parse, Kind, Definition } from 'graphql-rxjs';
 import { uniq } from 'lodash';
 import { buildASTSchema, extendSchema } from 'graphql-rxjs';
 import {
@@ -139,7 +139,7 @@ function buildSchemaFromTypeDefinitions(typeDefinitions: ITypeDefinitions): Grap
     myDefinitions = concatenateTypeDefs(myDefinitions);
   }
 
-  const astDocument: Document = parse(myDefinitions);
+  const astDocument: DocumentNode = parse(myDefinitions);
   let schema: GraphQLSchema = buildASTSchema(astDocument);
 
   const extensionsAst = extractExtensionDefinitions(astDocument);
@@ -150,7 +150,7 @@ function buildSchemaFromTypeDefinitions(typeDefinitions: ITypeDefinitions): Grap
   return schema;
 }
 
-function extractExtensionDefinitions(ast: Document) {
+function extractExtensionDefinitions(ast: DocumentNode) {
   const extensionDefs =
     ast.definitions.filter((def: Definition) => def.kind === Kind.TYPE_EXTENSION_DEFINITION);
 

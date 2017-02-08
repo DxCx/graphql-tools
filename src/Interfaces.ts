@@ -2,7 +2,7 @@ import {
     GraphQLSchema,
     GraphQLFieldDefinition,
     GraphQLResolveInfo,
-    GraphQLResult,
+    ExecutionResult,
     GraphQLType,
     GraphQLFieldResolveFn,
     GraphQLIsTypeOfFn,
@@ -65,5 +65,5 @@ export interface IMockOptions {
 }
 
 export interface IMockServer {
-    query: (query: string, vars?: { [key: string]: any }) => Promise<GraphQLResult>;
+    query: (query: string, vars?: { [key: string]: any }) => Promise<ExecutionResult>;
 }
